@@ -1,8 +1,8 @@
 <template>
-  <v-container fluid fill-height @click="toggle">
+  <v-container fluid fill-height @click="(e) => $emit('click', e)">
     <Message
-      v-if="countdown > 0"
-      :message="countdown"/>
+      v-if="count > 0"
+      :message="count"/>
     <Sign
       v-else
       :direction="direction"
@@ -14,7 +14,6 @@
 import Message from '../components/Message'
 import Sign from '../components/Sign'
 
-// eslint-disable-next-line
 let task, idx = 0
 const directions = ['fl', 'fr', 'r', 'br', 'bl', 'l']
 
@@ -31,43 +30,63 @@ export default {
     runTime: {
       type: Number,
       default: 5000
+    },
+    countdown: {
+      type: Number,
+      default: 5
+    },
+    runs: {
+      type: Number,
+      default: 12
     }
   },
   data() {
     return {
-      countdown: 10,
+      count: this.countdown,
+      run: 0,
       direction: null
     }
   },
   mounted() {
     this.next()
   },
+  destroyed() {
+    if (task !== undefined) {
+      clearTimeout(task)
+      task = undefined
+    }
+  },
   methods: {
     next() {
-      if (this.countdown > 0) {
+      console.log('next')
+      if (this.count > 0) {
         task = setTimeout(() => {
-          this.countdown--
+          console.log('director counting down')
+          this.count--
           this.next()
         }, 1000)
-      } else {
+      } else if (this.run < this.runs){
+        this.run++
+        
+        // Resetting and delaying proper set to trigger watchers also
+        // when the value does not change (i.e. when giving same
+        // direction twice)
         this.direction = null
-        setImmediate(() => this.direction = directions[idx])
         //idx = (idx + 1) % directions.length
         idx = Math.floor(Math.random() * directions.length)
-        task = setTimeout(this.next, this.runTime)
+        setImmediate(() => this.direction = directions[idx])
+
+        task = setTimeout(() => {
+          console.log('director updating')
+          this.next()
+        }, this.runTime)
+      } else {
+        this.$emit('end')
       }
-    },
-    toggle() {
-      // if (task) {
-      //   clearTimeout(task)
-      //   task = undefined
-      // } else {
-      //   task = setTimeout(this.next, 0)
-      // }
     }
   }
 }
 </script>
-<style>
+<style scoped>
 
 </style>

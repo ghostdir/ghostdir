@@ -9,7 +9,6 @@
   </v-container>
 </template>
 <script>
-// eslint-disable-next-line
 let task;
 
 export default {
@@ -70,6 +69,12 @@ export default {
   mounted() {
     this.scheduleBounce()
   },
+  destroyed() {
+    if (task !== undefined) {
+      clearTimeout(task)
+      task = undefined
+    }
+  },
   watch: {
     direction() {
       this.scheduleBounce()
@@ -77,9 +82,10 @@ export default {
   },
   methods: {
     scheduleBounce() {
-      if (this.bounceAfter) {
+      if (this.direction && this.bounceAfter) {
       this.bounce = false
         task = setTimeout(() => {
+          console.log('sign bouncing')
           this.bounce = true
         }, this.bounceAfter)
       }
