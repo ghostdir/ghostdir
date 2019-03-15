@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="configuring">
+  <v-container v-if="!started">
     <v-card
       class="mx-auto" max-width="600" flat>
       <v-subheader class="subheading font-weight-medium text-uppercase">
@@ -105,7 +105,7 @@
       
       <v-card-text>
         <v-btn
-          block large color="blue" @click="configuring = false">
+          block large color="blue" @click="start">
           Start
         </v-btn>
       </v-card-text>
@@ -113,12 +113,15 @@
   </v-container>
   <Director
     v-else
-    @click="configuring = true"
-    @end="configuring = true"
+    @click="stop"
+    @end="stop"
     :runs="runs" :run-time="runTime" :countdown="countdown"/>
 </template>
 <script>
+import NoSleep from 'nosleep.js'
 import Director from '../components/Director'
+
+const noSleep = new NoSleep()
 
 export default {
   components: {
@@ -126,7 +129,7 @@ export default {
   },
   data() {
     return {
-      configuring: true,
+      started: false,
       pace: 5,
       runs: 12,
       countdown: 5
@@ -135,6 +138,16 @@ export default {
   computed: {
     runTime() {
       return this.pace * 1000
+    }
+  },
+  methods: {
+    start() {
+      this.started = true
+      noSleep.enable()
+    },
+    stop() {
+      this.started = false
+      noSleep.disable()
     }
   }
 }

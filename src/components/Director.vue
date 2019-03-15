@@ -58,10 +58,8 @@ export default {
   },
   methods: {
     next() {
-      console.log('next')
       if (this.count > 0) {
         task = setTimeout(() => {
-          console.log('director counting down')
           this.count--
           this.next()
         }, 1000)
@@ -77,7 +75,6 @@ export default {
         setImmediate(() => this.direction = directions[idx])
 
         task = setTimeout(() => {
-          console.log('director updating')
           this.next()
         }, this.runTime)
       } else {
