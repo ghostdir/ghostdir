@@ -1,12 +1,14 @@
 <template>
-  <v-container fluid fill-height>
-    <v-layout
-      v-if="direction"
-      align-center justify-center
-      :class="classes"
-      :style="style">
-    </v-layout>
-  </v-container>
+  <div :style="styles.t">
+    <v-container fluid fill-height>
+      <v-layout
+        v-if="direction"
+        align-center justify-center
+        :class="classes.dir"
+        :style="styles.dir">
+      </v-layout>
+    </v-container>
+  </div>
 </template>
 <script>
 let task;
@@ -32,13 +34,24 @@ export default {
   computed: {
     classes() {
       return {
-        bounce: this.bounce
+        dir: {
+          bounce: this.bounce
+        }
       }
     },
-    style() {
+    styles() {
       return {
-        'background': `url(${this.image}) center no-repeat`,
-        'animation-duration': this.bounce ? `${this.bounceFor / 1000}s` : '0s'
+        dir: {
+          'background': `url(${this.image}) center no-repeat`,
+          'background-size': 'contain',
+          'animation-duration': this.bounce ? `${this.bounceFor / 1000}s` : '0s'
+        },
+        t: {
+          'height': '100%',
+          'width': '100%',
+          'background': `url(${require('../assets/t.svg')}) center no-repeat`,
+          'background-size': 'cover'
+        }
       }
     },
     image() {
@@ -85,7 +98,6 @@ export default {
       if (this.direction && this.bounceAfter) {
       this.bounce = false
         task = setTimeout(() => {
-          console.log('sign bouncing')
           this.bounce = true
         }, this.bounceAfter)
       }

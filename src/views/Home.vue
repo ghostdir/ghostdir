@@ -140,6 +140,9 @@ export default {
       return this.pace * 1000
     }
   },
+  destroyed() {
+    this.stop()
+  },
   methods: {
     start() {
       this.started = true
