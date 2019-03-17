@@ -15,7 +15,6 @@ import Message from '../components/Message'
 import Sign from '../components/Sign'
 
 let task, idx = 0
-const directions = ['fl', 'fr', 'r', 'br', 'bl', 'l']
 
 export default {
   components: {
@@ -23,6 +22,12 @@ export default {
     Sign    
   },
   props: {
+    directions: {
+      type: Array,
+      default() {
+        return ['fl', 'fr', 'r', 'br', 'bl', 'l']
+      }
+    },
     splitTime: {
       type: Number,
       default: 800
@@ -70,9 +75,9 @@ export default {
         // when the value does not change (i.e. when giving same
         // direction twice)
         this.direction = null
-        //idx = (idx + 1) % directions.length
-        idx = Math.floor(Math.random() * directions.length)
-        setImmediate(() => this.direction = directions[idx])
+        //idx = (idx + 1) % this.directions.length
+        idx = Math.floor(Math.random() * this.directions.length)
+        setImmediate(() => this.direction = this.directions[idx])
 
         task = setTimeout(() => {
           this.next()
