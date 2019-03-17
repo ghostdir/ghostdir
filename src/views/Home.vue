@@ -27,6 +27,8 @@
 
           <directions-control
             v-model="directions"
+            :order.sync="order"
+            :reduce.sync="reduce"
             title="Directions"/>
           
         </v-expansion-panel-content>
@@ -44,7 +46,7 @@
     v-else
     @click="stop"
     @end="stop"
-    :directions="directions"
+    :directions="directions" :order="order" :reduce="reduce"
     :runs="runs" :run-time="runTime" :countdown="countdown"/>
 </template>
 <script>
@@ -67,7 +69,9 @@ export default {
       pace: 5,
       runs: 12,
       countdown: 5,
-      directions: ['fl', 'fr', 'bl', 'br', 'l', 'r']
+      directions: ['fl', 'fr', 'r', 'br', 'bl', 'l'],
+      order: 'random',
+      reduce: true
     }
   },
   computed: {

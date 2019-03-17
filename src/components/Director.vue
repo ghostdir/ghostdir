@@ -6,7 +6,7 @@
     <Sign
       v-else
       :direction="direction"
-      :bounce-after="runTime - splitTime"
+      :bounce-after="adjustedRunTime - splitTime"
       :bounce-for="splitTime"/>
   </v-container>
 </template>
@@ -14,7 +14,7 @@
 import Message from '../components/Message'
 import Sign from '../components/Sign'
 
-let task, idx = 0
+let task, idx = -1
 
 export default {
   components: {
@@ -27,6 +27,10 @@ export default {
       default() {
         return ['fl', 'fr', 'r', 'br', 'bl', 'l']
       }
+    },
+    order: {
+      type: String,
+      default: 'random'
     },
     splitTime: {
       type: Number,
@@ -43,6 +47,19 @@ export default {
     runs: {
       type: Number,
       default: 12
+    },
+    reduce: {
+      type: Boolean,
+      default: true
+    }
+  },
+  computed: {
+    adjustedRunTime() {
+      if (this.reduce && (this.direction == 'r' || this.direction === 'l')) {
+        return this.runTime * 0.7
+      } else {
+        return this.runTime
+      }
     }
   },
   data() {
@@ -75,13 +92,21 @@ export default {
         // when the value does not change (i.e. when giving same
         // direction twice)
         this.direction = null
-        //idx = (idx + 1) % this.directions.length
-        idx = Math.floor(Math.random() * this.directions.length)
-        setImmediate(() => this.direction = this.directions[idx])
 
-        task = setTimeout(() => {
-          this.next()
-        }, this.runTime)
+        if (this.order === 'random') {
+          idx = Math.floor(Math.random() * this.directions.length)
+        } else {
+          idx = (idx + (this.order === 'anticlockwise' ?
+                        -1 : 1)) % this.directions.length
+          idx = idx < 0 ? idx + this.directions.length : idx
+        }
+
+        setImmediate(() => {
+          this.direction = this.directions[idx]
+          task = setTimeout(() => {
+            this.next()
+          }, this.adjustedRunTime)
+        })
       } else {
         this.$emit('end')
       }
