@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <v-card
       class="mx-auto" max-width="600" flat>
       <slider
@@ -34,22 +33,19 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-card>
+
     <v-btn
       fab fixed dark bottom right large color="blue"
       :disabled="directions.length < 1"
       @click="start">
       <v-icon>play_arrow</v-icon>
     </v-btn>
-
   </v-container>
 </template>
 <script>
 import { mapGetters } from 'vuex'
-import NoSleep from 'nosleep.js'
 import Slider from '../components/Slider'
 import DirectionsControl from '../components/DirectionsControl'
-
-const noSleep = new NoSleep()
 
 export default {
   components: {
@@ -58,7 +54,7 @@ export default {
   },
   data() {
     return {
-      noSleep
+
     }
   },
   computed: {
@@ -114,16 +110,9 @@ export default {
       'runTime'
     ])
   },
-  destroyed() {
-    this.stop()
-  },
   methods: {
     start() {
-      noSleep.enable()
       this.$router.push('run')
-    },
-    stop() {
-      noSleep.disable()
     }
   }
 }

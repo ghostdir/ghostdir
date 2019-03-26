@@ -7,11 +7,17 @@
 </template>
 <script>
 import { mapState, mapGetters } from 'vuex'
+import NoSleep from 'nosleep.js'
 import Director from '../components/Director'
 
 export default {
   components: {
     Director
+  },
+  data() {
+    return {
+      noSleep: new NoSleep()
+    }
   },
   computed: {
     ...mapState([
@@ -24,6 +30,12 @@ export default {
     ...mapGetters([
       'runTime'
     ])
+  },
+  mounted() {
+    this.noSleep.enable()
+  },
+  beforeDestroy() {
+    this.noSleep.disable()
   },
   methods: {
     stop() {
