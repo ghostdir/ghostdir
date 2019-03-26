@@ -32,7 +32,9 @@ export default new Vuex.Store({
       state.reduce = val
     }
   },
-  actions: {
-
+  getters: {
+    runTime(state) {
+      return state.pace * 1000
+    }
   }
 })

@@ -1,5 +1,5 @@
 <template>
-  <v-container v-if="!started">
+  <v-container>
 
     <v-card
       class="mx-auto" max-width="600" flat>
@@ -42,16 +42,10 @@
     </v-btn>
 
   </v-container>
-  <Director
-    v-else
-    @click="stop"
-    @end="stop"
-    :directions="directions" :order="order" :reduce="reduce"
-    :runs="runs" :run-time="runTime" :countdown="countdown"/>
 </template>
 <script>
+import { mapGetters } from 'vuex'
 import NoSleep from 'nosleep.js'
-import Director from '../components/Director'
 import Slider from '../components/Slider'
 import DirectionsControl from '../components/DirectionsControl'
 
@@ -59,13 +53,12 @@ const noSleep = new NoSleep()
 
 export default {
   components: {
-    Director,
     Slider,
     DirectionsControl
   },
   data() {
     return {
-      started: false
+      noSleep
     }
   },
   computed: {
@@ -117,20 +110,19 @@ export default {
         this.$store.commit('setReduce', val)
       }
     },
-    runTime() {
-      return this.pace * 1000
-    }
+    ...mapGetters([
+      'runTime'
+    ])
   },
   destroyed() {
     this.stop()
   },
   methods: {
     start() {
-      this.started = true
       noSleep.enable()
+      this.$router.push('run')
     },
     stop() {
-      this.started = false
       noSleep.disable()
     }
   }
