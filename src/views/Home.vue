@@ -65,16 +65,58 @@ export default {
   },
   data() {
     return {
-      started: false,
-      pace: 5,
-      runs: 12,
-      countdown: 5,
-      directions: ['fl', 'fr', 'r', 'br', 'bl', 'l'],
-      order: 'random',
-      reduce: true
+      started: false
     }
   },
   computed: {
+    pace: {
+      get() {
+        return this.$store.state.pace
+      },
+      set(val) {
+        this.$store.commit('setPace', val)
+      }
+    },
+    runs: {
+      get() {
+        return this.$store.state.runs
+      },
+      set(val) {
+        this.$store.commit('setRuns', val)
+      }
+    },
+    countdown: {
+      get() {
+        return this.$store.state.countdown
+      },
+      set(val) {
+        this.$store.commit('setCountdown', val)
+      }
+    },
+    directions: {
+      get() {
+        return this.$store.state.directions
+      },
+      set(val) {
+        this.$store.commit('setDirections', val)
+      }
+    },
+    order: {
+      get() {
+        return this.$store.state.order
+      },
+      set(val) {
+        this.$store.commit('setOrder', val)
+      }
+    },
+    reduce: {
+      get() {
+        return this.$store.state.reduce
+      },
+      set(val) {
+        this.$store.commit('setReduce', val)
+      }
+    },
     runTime() {
       return this.pace * 1000
     }
