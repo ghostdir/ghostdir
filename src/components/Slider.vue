@@ -26,12 +26,12 @@
         :value="value" :min="min" :max="max" :step="step" always-dirty
         @input="$emit('input', $event)">
         <template v-slot:prepend>
-          <v-icon @click="$emit('input', value - 1)">
+          <v-icon @click="$emit('input', value - step)">
             remove
           </v-icon>
         </template>
         <template v-slot:append>
-          <v-icon  @click="$emit('input', value + 1)">
+          <v-icon  @click="$emit('input', value + step)">
             add
           </v-icon>
         </template>

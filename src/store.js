@@ -5,19 +5,23 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    pace: 5,
     runs: 12,
+    pace: 5,
+    transition: .5,
     countdown: 5,
     directions: ['fl', 'fr', 'r', 'br', 'bl', 'l'],
     order: 'random',
     reduce: true
   },
   mutations: {
+    setRuns(state, val) {
+      state.runs = val
+    },
     setPace(state, val) {
       state.pace = val
     },
-    setRuns(state, val) {
-      state.runs = val
+    setTransition(state, val) {
+      state.transition = val
     },
     setCountdown(state, val) {
       state.countdown = val
@@ -33,8 +37,6 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    runTime(state) {
-      return state.pace * 1000
-    }
+
   }
 })

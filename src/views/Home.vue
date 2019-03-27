@@ -14,6 +14,10 @@
         :secondaryValue="Math.round(pace * runs)"
         secondaryUnit="seconds"/>
 
+      <slider
+        v-model="countdown" :min="0" :max="120" :step="1"
+        title="Countdown" :unit="`second${countdown == 1 ? '' : 's'}`"/>
+
       <v-expansion-panel popout>
         <v-expansion-panel-content>
           <template v-slot:header>
@@ -21,8 +25,9 @@
           </template>
 
           <slider
-            v-model="countdown" :min="0" :max="120" :step="1"
-            title="Countdown" :unit="`second${countdown == 1 ? '' : 's'}`"/>
+            v-model="transition" :min="0" :max="1" :step="0.1"
+            title="Transition Time"
+            :unit="`second${transition == 1 ? '' : 's'}`"/>
 
           <directions-control
             v-model="directions"
@@ -43,7 +48,6 @@
   </v-container>
 </template>
 <script>
-import { mapGetters } from 'vuex'
 import Slider from '../components/Slider'
 import DirectionsControl from '../components/DirectionsControl'
 
@@ -58,6 +62,14 @@ export default {
     }
   },
   computed: {
+    runs: {
+      get() {
+        return this.$store.state.runs
+      },
+      set(val) {
+        this.$store.commit('setRuns', val)
+      }
+    },
     pace: {
       get() {
         return this.$store.state.pace
@@ -66,12 +78,12 @@ export default {
         this.$store.commit('setPace', val)
       }
     },
-    runs: {
+    transition: {
       get() {
-        return this.$store.state.runs
+        return this.$store.state.transition
       },
       set(val) {
-        this.$store.commit('setRuns', val)
+        this.$store.commit('setTransition', val)
       }
     },
     countdown: {
@@ -105,10 +117,7 @@ export default {
       set(val) {
         this.$store.commit('setReduce', val)
       }
-    },
-    ...mapGetters([
-      'runTime'
-    ])
+    }
   },
   methods: {
     start() {

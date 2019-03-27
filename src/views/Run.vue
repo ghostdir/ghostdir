@@ -1,12 +1,12 @@
 <template>
   <Director
     :directions="directions" :order="order" :reduce="reduce"
-    :runs="runs" :run-time="runTime" :countdown="countdown"
+    :runs="runs" :pace="pace" :transition="transition" :countdown="countdown"
     @click="stop"
     @end="stop"/>
 </template>
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import NoSleep from 'nosleep.js'
 import Director from '../components/Director'
 
@@ -25,10 +25,9 @@ export default {
       'order',
       'reduce',
       'runs',
+      'pace',
+      'transition',
       'countdown'
-    ]),
-    ...mapGetters([
-      'runTime'
     ])
   },
   mounted() {

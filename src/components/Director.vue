@@ -32,13 +32,13 @@ export default {
       type: String,
       default: 'random'
     },
-    splitTime: {
+    pace: {
       type: Number,
-      default: 800
+      default: 5
     },
-    runTime: {
+    transition: {
       type: Number,
-      default: 5000
+      default: 0.5
     },
     countdown: {
       type: Number,
@@ -54,12 +54,18 @@ export default {
     }
   },
   computed: {
+    runTime() {
+      return this.pace * 1000
+    },
     adjustedRunTime() {
       if (this.reduce && (this.direction == 'r' || this.direction === 'l')) {
         return this.runTime * 0.7
       } else {
         return this.runTime
       }
+    },
+    splitTime() {
+      return this.transition * 1000
     }
   },
   data() {
