@@ -7,27 +7,27 @@
       <v-layout row justify-center wrap>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.fl" direction="fl"/>
+            v-model="value.fl" direction="fl"/>
         </v-flex>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.fr" direction="fr"/>
+            v-model="value.fr" direction="fr"/>
         </v-flex>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.bl" direction="bl"/>
+            v-model="value.bl" direction="bl"/>
         </v-flex>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.br" direction="br"/>
+            v-model="value.br" direction="br"/>
         </v-flex>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.l" direction="l"/>
+            v-model="value.l" direction="l"/>
         </v-flex>
         <v-flex xs4 sm2>
           <direction-control
-            v-model="dir.r" direction="r"/>
+            v-model="value.r" direction="r"/>
         </v-flex>
       </v-layout>
     </v-card-text>
@@ -55,9 +55,16 @@ export default {
   },
   props: {
     value: {
-      type: Array,
+      type: Object,
       default() {
-        return []
+        return {
+          fl: true,
+          fr: true,
+          r: false,
+          br: true,
+          bl: true,
+          l: false
+        }
       }
     },
     title: {
@@ -73,29 +80,11 @@ export default {
       default: true
     }
   },
-  data() {
-    return {
-      dir: {
-        fl: !!this.value && this.value.indexOf('fl') >= 0,
-        fr: !!this.value && this.value.indexOf('fr') >= 0,
-        r: !!this.value && this.value.indexOf('r') >= 0,
-        br: !!this.value && this.value.indexOf('br') >= 0,
-        bl: !!this.value && this.value.indexOf('bl') >= 0,
-        l: !!this.value && this.value.indexOf('l') >= 0,
-      }
-    }
-  },
   watch: {
-    dir: {
+    value: {
       deep: true,
       handler() {
-        const val = []
-        for (let d in this.dir) {
-          if (this.dir[d]) {
-            val.push(d)
-          }
-        }
-        this.$emit('input', val)
+        this.$emit('input', this.value)
       }
     }
   }

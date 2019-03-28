@@ -37,11 +37,17 @@
           
         </v-expansion-panel-content>
       </v-expansion-panel>
+
+        <v-btn
+          block large dark color="blue" @click="reset">
+          Reset to defaults
+        </v-btn>
+        
     </v-card>
 
     <v-btn
       fab fixed dark bottom right large color="blue"
-      :disabled="directions.length < 1"
+      :disabled="!ready"
       @click="start">
       <v-icon>play_arrow</v-icon>
     </v-btn>
@@ -50,6 +56,7 @@
 <script>
 import Slider from '../components/Slider'
 import DirectionsControl from '../components/DirectionsControl'
+import _ from 'lodash'
 
 export default {
   components: {
@@ -117,9 +124,15 @@ export default {
       set(val) {
         this.$store.commit('setReduce', val)
       }
+    },
+    ready() {
+      return _.filter(this.directions).length > 0
     }
   },
   methods: {
+    reset() {
+      this.$store.commit('reset')
+    },
     start() {
       this.$router.push('run')
     }

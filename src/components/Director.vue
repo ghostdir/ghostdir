@@ -13,8 +13,9 @@
 <script>
 import Message from '../components/Message'
 import Sign from '../components/Sign'
+import _ from 'lodash'
 
-let task, idx = -1
+let task
 
 export default {
   components: {
@@ -23,9 +24,16 @@ export default {
   },
   props: {
     directions: {
-      type: Array,
+      type: Object,
       default() {
-        return ['fl', 'fr', 'r', 'br', 'bl', 'l']
+        return {
+          fl: false,
+          fr: false,
+          r: true,
+          br: false,
+          bl: false,
+          l: true
+        }
       }
     },
     order: {
@@ -66,13 +74,24 @@ export default {
     },
     splitTime() {
       return this.transition * 1000
+    },
+    dirArray() {
+      const val = []
+      const ord = ['fl', 'fr', 'r', 'br', 'bl', 'l']
+      _.forEach(ord, (dir) => {
+        if (this.directions[dir]) {
+          val.push(dir)
+        }
+      })
+      return val
     }
   },
   data() {
     return {
       count: this.countdown,
       run: 0,
-      direction: null
+      direction: null,
+      index: this.order === 'anticlockwise' ? 2 : -1
     }
   },
   mounted() {
@@ -100,15 +119,16 @@ export default {
         this.direction = null
 
         if (this.order === 'random') {
-          idx = Math.floor(Math.random() * this.directions.length)
+          this.index = _.random(0, this.dirArray.length - 1)
         } else {
-          idx = (idx + (this.order === 'anticlockwise' ?
-                        -1 : 1)) % this.directions.length
-          idx = idx < 0 ? idx + this.directions.length : idx
+          this.index = (this.index + (this.order === 'anticlockwise' ?
+                        -1 : 1)) % this.dirArray.length
+          this.index = (this.index < 0 ?
+                        this.index + this.dirArray.length : this.index)
         }
 
         setImmediate(() => {
-          this.direction = this.directions[idx]
+          this.direction = this.dirArray[this.index]
           task = setTimeout(() => {
             this.next()
           }, this.adjustedRunTime)
